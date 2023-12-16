@@ -4,7 +4,6 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Searchbar } from './Searchbar/Searchbar';
 import { Modal } from './Modal/Modal';
-import toast, { Toaster } from 'react-hot-toast';
 
 export class App extends Component {
   state = {
@@ -39,7 +38,6 @@ export class App extends Component {
         total: response.hits,
       }));
     } catch (error) {
-      console.log(error);
       this.setState({ error: error.response.data });
     } finally {
       this.setState({ isLoading: false });
@@ -59,7 +57,7 @@ export class App extends Component {
     }));
   };
 
-  openModal = url => {
+  openModal = () => {
     this.setState({
       isShowModal: false,
     });
@@ -79,8 +77,8 @@ export class App extends Component {
         {images.length > 0 && (
           <ImageGallery images={images} onClick={this.toggleModal} />
         )}
-        {/* {isLoading && <h1>...Loading</h1>}
-        {error && <h>{error}</h>} */}
+        {isLoading && <h1>...Loading</h1>}
+        {error && <h>{error}</h>}
         {isShowModal && <Modal onClose={this.toggleModal} />}
         <Button onClick={this.handleLoadMore} />
       </>
