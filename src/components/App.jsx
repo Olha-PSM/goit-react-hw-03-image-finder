@@ -57,17 +57,17 @@ export class App extends Component {
     }));
   };
 
-  openModal = () => {
-    this.setState({
-      isShowModal: false,
-    });
-  };
+  // openModal = () => {
+  //   this.setState({
+  //     isShowModal: false,
+  //   });
+  // };
 
-  closeModal = () => {
-    this.setState({
-      isShowModal: true,
-    });
-  };
+  // closeModal = () => {
+  //   this.setState({
+  //     isShowModal: true,
+  //   });
+  // };
   render() {
     const { isLoading, error, images, isShowModal } = this.state;
 
