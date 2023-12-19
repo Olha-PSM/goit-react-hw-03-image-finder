@@ -4,6 +4,11 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Searchbar } from './Searchbar/Searchbar';
 import { Modal } from './Modal/Modal';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Section } from './Appi.styled';
+
+import { Loader } from './Loader/Loader';
 
 export class App extends Component {
   state = {
@@ -12,7 +17,9 @@ export class App extends Component {
     error: '',
     page: 1,
     images: [],
-    isShowModal: false,
+
+    largeImage: '',
+    allpages: '',
   };
   componentDidMount() {
     this.getImages();
@@ -31,12 +38,16 @@ export class App extends Component {
     try {
       this.setState({ isLoading: true, error: '' });
       const response = await fetchImages(query, page * 12);
+
       this.setState(prev => ({
         images: prev.images
           ? [...prev.images, ...response.hits]
           : response.hits,
-        total: response.hits,
+        total: response.totalHits,
+        allpages: Math.ceil(response.totalHits / 12),
+        largeImage: response.hits.largeImageURL,
       }));
+      console.log(response.total);
     } catch (error) {
       this.setState({ error: error.response.data });
     } finally {
@@ -45,43 +56,54 @@ export class App extends Component {
   };
 
   handleFormSubmit = query => {
-    this.setState({ query });
+    this.setState({ query, page: 1, images: [] });
   };
   handleLoadMore = () => {
     this.setState(prev => ({ page: prev.page + 1 }));
   };
 
-  toggleModal = () => {
-    this.setState(prev => ({
-      isShowModal: !prev.isShowModal,
-    }));
+  // toggleModal = () => {
+  //   this.setState(prev => ({
+  //     isShowModal: !prev.isShowModal,
+  //   }));
+  // };
+
+  openModal = largeImageURL => {
+    this.setState({ largeImage: largeImageURL });
   };
 
-  // openModal = () => {
-  //   this.setState({
-  //     isShowModal: false,
-  //   });
-  // };
+  closeModal = () => {
+    this.setState({ largeImage: '' });
+  };
 
-  // closeModal = () => {
-  //   this.setState({
-  //     isShowModal: true,
-  //   });
-  // };
   render() {
-    const { isLoading, error, images, isShowModal } = this.state;
+    const {
+      isLoading,
+      error,
+      images,
+      page,
+
+      largeImage,
+
+      allpages,
+    } = this.state;
 
     return (
-      <>
+      <Section>
         <Searchbar onSubmit={this.handleFormSubmit} />
+        {isLoading && <Loader />}
         {images.length > 0 && (
-          <ImageGallery images={images} onClick={this.toggleModal} />
+          <ImageGallery images={images} onOpen={this.openModal} />
         )}
-        {isLoading && <h1>...Loading</h1>}
+
         {error && <h>{error}</h>}
-        {isShowModal && <Modal onClose={this.toggleModal} />}
-        <Button onClick={this.handleLoadMore} />
-      </>
+        {largeImage && (
+          <Modal largeImg={largeImage} onClose={this.closeModal} />
+        )}
+        {images.length > 0 && page <= allpages && (
+          <Button onClick={this.handleLoadMore} />
+        )}
+      </Section>
     );
   }
 }

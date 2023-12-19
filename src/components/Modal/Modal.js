@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { Overlay, ModalWindow } from '../Modal/Modal.styled';
 
 export class Modal extends Component {
   componentDidMount() {
@@ -21,10 +22,13 @@ export class Modal extends Component {
   };
 
   render() {
+    const { largeImg } = this.props;
     return (
-      <div onClick={this.handleClick}>
-        <img src="" alt="" />
-      </div>
+      <Overlay onClick={this.handleClick}>
+        <ModalWindow>
+          <img src={largeImg} alt="" />
+        </ModalWindow>
+      </Overlay>
     );
   }
 }

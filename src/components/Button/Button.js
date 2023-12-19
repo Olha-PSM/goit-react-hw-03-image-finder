@@ -1,3 +1,4 @@
+import { LoadBtn } from '../Button/Button.styled';
 export const Button = ({ onClick }) => {
-  return <button onClick={onClick}>Load More</button>;
+  return <LoadBtn onClick={onClick}>Load More</LoadBtn>;
 };

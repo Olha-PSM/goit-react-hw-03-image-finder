@@ -1,11 +1,11 @@
 import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
-
-export const ImageGallery = ({ images, onClick }) => {
+import { List } from '../ImageGallery/ImageGallery.styled';
+export const ImageGallery = ({ images, onOpen }) => {
   return (
-    <ul>
+    <List>
       {images.map(image => (
-        <ImageGalleryItem key={images.id} image={image} onClick={onClick} />
+        <ImageGalleryItem key={image.id} image={image} onOpen={onOpen} />
       ))}
-    </ul>
+    </List>
   );
 };

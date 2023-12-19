@@ -1,5 +1,6 @@
 import { Component } from 'react';
-
+import { Search, SearchBtn, SearchInput, SearchForm } from './Searchbar.styled';
+import { BiSearch } from 'react-icons/bi';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -14,10 +15,6 @@ export class Searchbar extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    if (this.state.query.trim() === '') {
-      toast.error('Please, enter something');
-      return;
-    }
 
     this.props.onSubmit(this.state.query);
 
@@ -26,20 +23,20 @@ export class Searchbar extends Component {
 
   render() {
     return (
-      <header>
-        <form onSubmit={this.handleSubmit}>
-          <button type="submit">
-            <span>Search</span>
-          </button>
+      <Search>
+        <SearchForm onSubmit={this.handleSubmit}>
+          <SearchBtn type="submit">
+            <BiSearch />
+          </SearchBtn>
 
-          <input
+          <SearchInput
             type="text"
             placeholder="Search images and photos"
             value={this.state.query}
             onChange={this.handleInputChange}
           />
-        </form>
-      </header>
+        </SearchForm>
+      </Search>
     );
   }
 }
