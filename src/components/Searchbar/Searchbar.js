@@ -1,8 +1,6 @@
 import { Component } from 'react';
 import { Search, SearchBtn, SearchInput, SearchForm } from './Searchbar.styled';
 import { BiSearch } from 'react-icons/bi';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 export class Searchbar extends Component {
   state = {
