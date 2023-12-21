@@ -4,8 +4,6 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Searchbar } from './Searchbar/Searchbar';
 import { Modal } from './Modal/Modal';
-// import { toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
 import { Section } from './Appi.styled';
 
 import { Loader } from './Loader/Loader';
@@ -19,7 +17,7 @@ export class App extends Component {
     images: [],
 
     largeImage: '',
-    allpages: '',
+    totalPages: '',
   };
   componentDidMount() {
     this.getImages();
@@ -37,17 +35,18 @@ export class App extends Component {
     const { query, page } = this.state;
     try {
       this.setState({ isLoading: true, error: '' });
-      const response = await fetchImages(query, page * 12);
+      const response = await fetchImages(query, page);
 
       this.setState(prev => ({
         images: prev.images
           ? [...prev.images, ...response.hits]
           : response.hits,
         total: response.totalHits,
-        allpages: Math.ceil(response.totalHits / 12),
+
+        totalPages: Math.ceil(response.totalHits / 12),
         largeImage: response.hits.largeImageURL,
       }));
-      console.log(response.total);
+      console.log(response.totalHits);
     } catch (error) {
       this.setState({ error: error.response.data });
     } finally {
@@ -61,12 +60,6 @@ export class App extends Component {
   handleLoadMore = () => {
     this.setState(prev => ({ page: prev.page + 1 }));
   };
-
-  // toggleModal = () => {
-  //   this.setState(prev => ({
-  //     isShowModal: !prev.isShowModal,
-  //   }));
-  // };
 
   openModal = largeImageURL => {
     this.setState({ largeImage: largeImageURL });
@@ -84,8 +77,6 @@ export class App extends Component {
       page,
 
       largeImage,
-
-      allpages,
     } = this.state;
 
     return (
@@ -100,9 +91,7 @@ export class App extends Component {
         {largeImage && (
           <Modal largeImg={largeImage} onClose={this.closeModal} />
         )}
-        {images.length > 0 && page <= allpages && (
-          <Button onClick={this.handleLoadMore} />
-        )}
+        {images.length > 0 && <Button onClick={this.handleLoadMore} />}
       </Section>
     );
   }

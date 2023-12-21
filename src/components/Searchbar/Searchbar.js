@@ -2,9 +2,11 @@ import { Component } from 'react';
 import { Search, SearchBtn, SearchInput, SearchForm } from './Searchbar.styled';
 import { BiSearch } from 'react-icons/bi';
 
+import { toast } from 'react-toastify';
+
 export class Searchbar extends Component {
   state = {
-    query: '',
+    query: null,
   };
 
   handleInputChange = e => {
@@ -13,6 +15,10 @@ export class Searchbar extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    if (this.state.query.trim() === '') {
+      toast.error('Please, enter something');
+      return;
+    }
 
     this.props.onSubmit(this.state.query);
 
@@ -24,7 +30,7 @@ export class Searchbar extends Component {
       <Search>
         <SearchForm onSubmit={this.handleSubmit}>
           <SearchBtn type="submit">
-            <BiSearch />
+            <BiSearch size={'2em'} />
           </SearchBtn>
 
           <SearchInput
