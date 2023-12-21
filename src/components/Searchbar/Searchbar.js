@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 export class Searchbar extends Component {
   state = {
-    query: null,
+    query: '',
   };
 
   handleInputChange = e => {
@@ -15,8 +15,8 @@ export class Searchbar extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    if (this.state.query.trim() === '') {
-      toast.error('Please, enter something');
+    if (!this.state.query.trim()) {
+      toast.warn('Please, fill input search field');
       return;
     }
 

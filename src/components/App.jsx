@@ -5,8 +5,9 @@ import { Button } from './Button/Button';
 import { Searchbar } from './Searchbar/Searchbar';
 import { Modal } from './Modal/Modal';
 import { Section } from './Appi.styled';
-
 import { Loader } from './Loader/Loader';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export class App extends Component {
   state = {
@@ -15,9 +16,16 @@ export class App extends Component {
     error: '',
     page: 1,
     images: [],
-
     largeImage: '',
-    totalPages: '',
+    totalPages: 0,
+  };
+
+  handleFormSubmit = query => {
+    this.setState({ query, page: 1, images: [] });
+  };
+
+  handleLoadMore = () => {
+    this.setState(prev => ({ page: prev.page + 1 }));
   };
   componentDidMount() {
     this.getImages();
@@ -46,19 +54,11 @@ export class App extends Component {
         totalPages: Math.ceil(response.totalHits / 12),
         largeImage: response.hits.largeImageURL,
       }));
-      console.log(response.totalHits);
     } catch (error) {
       this.setState({ error: error.response.data });
     } finally {
       this.setState({ isLoading: false });
     }
-  };
-
-  handleFormSubmit = query => {
-    this.setState({ query, page: 1, images: [] });
-  };
-  handleLoadMore = () => {
-    this.setState(prev => ({ page: prev.page + 1 }));
   };
 
   openModal = largeImageURL => {
@@ -91,6 +91,7 @@ export class App extends Component {
           <Modal largeImg={largeImage} onClose={this.closeModal} />
         )}
         {images.length > 0 && <Button onClick={this.handleLoadMore} />}
+        <ToastContainer autoClose={1000} />
       </Section>
     );
   }
