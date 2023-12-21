@@ -70,27 +70,24 @@ export class App extends Component {
   };
 
   render() {
-    const {
-      isLoading,
-      error,
-      images,
-
-      largeImage,
-    } = this.state;
+    const { isLoading, error, images, page, totalPages, largeImage } =
+      this.state;
 
     return (
       <Section>
         <Searchbar onSubmit={this.handleFormSubmit} />
         {isLoading && <Loader />}
-        {images.length > 0 && (
+        {images.length !== 0 && (
           <ImageGallery images={images} onOpen={this.openModal} />
         )}
 
-        {error && <h>{error}</h>}
+        {error && <h1>{error}</h1>}
         {largeImage && (
           <Modal largeImg={largeImage} onClose={this.closeModal} />
         )}
-        {images.length > 0 && <Button onClick={this.handleLoadMore} />}
+        {images.length !== 0 && page < totalPages && (
+          <Button onClick={this.handleLoadMore} />
+        )}
         <ToastContainer autoClose={1000} />
       </Section>
     );
