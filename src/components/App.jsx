@@ -74,7 +74,6 @@ export class App extends Component {
       isLoading,
       error,
       images,
-      page,
 
       largeImage,
     } = this.state;
